@@ -20,5 +20,6 @@ from demo import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.IndexPage.as_view(), name='index')
+    url(r'^$', views.IndexPage.as_view(), name='index'),
+    url(r'^search$', views.QueryCharacter.as_view(), name='search')
 ]
