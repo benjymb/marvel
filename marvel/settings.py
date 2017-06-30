@@ -126,3 +126,12 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+MARVEL_API_URL = 'http://gateway.marvel.com/v1/public/'
+MARVEL_SIGNING_FORMAT = 'ts={}&apikey={}&hash={}'
+
+try:
+    from settings_private import *
+except ImportError:
+    PUBLIC_MARVEL_KEY = ''
+    PRIVATE_MARVEL_KEY = ''
