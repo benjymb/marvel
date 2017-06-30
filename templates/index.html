@@ -28,19 +28,36 @@
             <h3>Marvel&trade; Character Finder </h3>
         </div>
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-            <a href="#most-popular" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 0}" ng-if="!searchMode" ng-click="changeIndex(0)">Most Popular</a>
-            <a href="#recent" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 1}" ng-if="!searchMode" ng-click="changeIndex(1)">Recent Searches</a>
-            <a href="#details" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 2}" ng-if="searchMode" ng-click="changeIndex(2)">Character Details</a>
-            <a href="#photos" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 3}" ng-if="searchMode" ng-click="changeIndex(3)">Character Photos</a>
+            <a href="#recent" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 0}" ng-if="!searchMode" ng-click="changeIndex(0, '{% url 'recent' %}')">Recent Searches</a>
+            <a href="#details" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 2}" ng-if="searchMode" ng-click="changeIndex(2, '{% url 'most-popular' %}')">Search Results</a>
+            <a href="#photos" class="mdl-layout__tab" ng-class="{'is-active': selectedIndex == 3}" ng-if="searchMode" ng-click="changeIndex(3, '{% url 'most-popular' %}')">Character Photos</a>
         </div>
     </header>
     <main class="mdl-layout__content">
-        <div class="mdl-layout__tab-panel is-active" id="most-popular" ng-class="{'is-active': selectedIndex == 0}">
-        </div>
-        <div class="mdl-layout__tab-panel" id="recent" ng-class="{'is-active': selectedIndex == 1}">
+
+        <div class="mdl-layout__tab-panel" id="recent" ng-class="{'is-active': selectedIndex == 0}">
+            <section class="mdl-grid">
+            <div class="demo-card-image mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col" style="background: url('[[character.thumbnail]]') center / cover;" ng-repeat="character in recentCharacters">
+  <div class="mdl-card__title mdl-card--expand"></div>
+  <div class="mdl-card__actions">
+    <a class="mdl-button mdl-js-button mdl-js-ripple-effect demo-card-image__filename">
+        [[character.name]]
+    </a>
+  </div>
+</div>
+            </section>
         </div>
         <div class="mdl-layout__tab-panel" id="details" ng-class="{'is-active': selectedIndex == 2}">
-
+<section class="mdl-grid">
+            <div class="demo-card-image mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col" style="background: url('[[character.thumbnail]]') center / cover;" ng-repeat="character in searchResults">
+  <div class="mdl-card__title mdl-card--expand"></div>
+  <div class="mdl-card__actions">
+    <a class="mdl-button mdl-js-button mdl-js-ripple-effect demo-card-image__filename">
+        [[character.name]]
+    </a>
+  </div>
+</div>
+            </section>
         </div>
         <div class="mdl-layout__tab-panel" id="photos" ng-class="{'is-active': selectedIndex == 3}">
 
@@ -59,7 +76,7 @@
     </main>
 </div>
 
-<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="view-source" ng-click="changeMode()">
+<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="view-source" ng-click="changeMode('{% url 'search' %}')">
     <i class="material-icons" role="presentation">[[buttonMode]]</i>
     <span class="visuallyhidden">[[buttonMode]]</span>
 </button>

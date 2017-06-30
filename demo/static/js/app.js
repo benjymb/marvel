@@ -11,29 +11,48 @@ angular.module('demoApp', [])
             $interpolateProvider.startSymbol('[[').endSymbol(']]');
         }
     ])
-    .controller('MainAppController', function ($scope) {
+    .controller('MainAppController', ['$scope', '$http', function ($scope, $http) {
         $scope.currentAction = '';
         $scope.searchMode = false;
         $scope.selectedIndex = 0;
         $scope.buttonMode = 'search';
-        $scope.changeIndex = function (newValue) {
+        $scope.dataUrl = '';
+        $scope.characterId = null;
+
+        function cleanScopeData() {
+            $scope.recentCharacters = null;
+            $scope.searchResults = null;
+        }
+
+        $scope.changeIndex = function (newValue, url) {
+            cleanScopeData();
             $scope.selectedIndex = newValue;
+            $scope.dataUrl = url;
+            $scope.getData();
+
         };
-        $scope.changeMode = function(){
+        $scope.changeMode = function(url){
             if (!$scope.searchMode) {
+                $scope.dataUrl = url + '?query=' + prompt("Ingrese un nombre para buscar");
                 $scope.searchMode = true;
                 $scope.selectedIndex = 2;
                 $scope.buttonMode = 'close';
+                $scope.getData();
             } else {
                 $scope.searchMode = false;
                 $scope.selectedIndex = 0;
                 $scope.buttonMode = 'search';
             }
         };
-    })
-    .controller('MostPopularAppController', function ($scope) {
-        $scope.recentSearches = [];
-        $scope.characters = [];
-        $scope.popularCharacters = [];
-    });
+        $scope.getData = function(){
+            $http.get($scope.dataUrl).then(function(response) {
+                if ($scope.selectedIndex == "0"){
+                    $scope.recentCharacters = response.data;
+                } else if ($scope.selectedIndex == "2"){
+                    console.log(response.data);
+                    $scope.searchResults = response.data;
+                }
+            });
+        };
+    }]);
 
